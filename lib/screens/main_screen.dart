@@ -44,7 +44,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             ),
                             children: [
                               TextSpan(
-                                text: ' Chatting App',
+                                text: isSignupScreen ? ' 어서와 친구' : ' 왔어 베프?!! ',
                                 style: TextStyle(
                                     letterSpacing: 1.0,
                                     fontSize: 25,
@@ -57,7 +57,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         height: 5.0,
                       ),
                       Text(
-                        "Signup to continue",
+                        isSignupScreen ? "Signup to continue" : "Signin to continue",
                         style: TextStyle(
                           letterSpacing: 1.0,
                           color: Colors.white,
@@ -74,7 +74,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             top: 180,
             child: Container(
               padding: EdgeInsets.all(20),
-              height: 280,
+              height: isSignupScreen ? 280 : 250,
               width: MediaQuery.of(context).size.width - 40,
               margin: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
@@ -152,6 +152,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       ),
                     ],
                   ),
+                  if(isSignupScreen)
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Form(
@@ -194,7 +195,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           TextFormField(
                             decoration: InputDecoration(
                               prefixIcon: Icon(
-                                Icons.account_circle,
+                                Icons.email_outlined,
                                 color: Palette.iconColor,
                               ),
                               //둥근 태두리 만들기
@@ -214,7 +215,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                   Radius.circular(35.0),
                                 ),
                               ),
-                              hintText: '아이디 입력하세용~!',
+                              hintText: 'E-Mail 입력하세용~!',
                               hintStyle: TextStyle(
                                 fontSize: 14,
                                 color: Palette.textColor1,
@@ -225,6 +226,49 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           SizedBox(
                             height: 8,
                           ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.password,
+                                color: Palette.iconColor,
+                              ),
+                              //둥근 태두리 만들기
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.textColor1,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(35.0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.textColor1,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(35.0),
+                                ),
+                              ),
+                              hintText: '비밀번호 입력하세용~!',
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                color: Palette.textColor1,
+                              ),
+                              contentPadding: EdgeInsets.all(10),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  if(!isSignupScreen)
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 20
+                    ),
+                    child: Form(
+                      child: Column(
+                        children: [
                           TextFormField(
                             decoration: InputDecoration(
                               prefixIcon: Icon(
@@ -255,23 +299,56 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               ),
                               contentPadding: EdgeInsets.all(10),
                             ),
-                          )
+                          ),
+                          SizedBox(height: 8),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.password,
+                                color: Palette.iconColor,
+                              ),
+                              //둥근 태두리 만들기
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.textColor1,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(35.0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.textColor1,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(35.0),
+                                ),
+                              ),
+                              hintText: '비밀번호 입력하세용~!',
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                color: Palette.textColor1,
+                              ),
+                              contentPadding: EdgeInsets.all(10),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
           ),
           // 전송버튼
           Positioned(
-            top: 430,
+            top: isSignupScreen ? 430 : 390,
               right: 0,
               left: 0,
               child: Center(
                 child: Container(
-                  padding: EdgeInsets.only(top: 20, bottom: 20, right: 2, left: 2),
+                  padding: EdgeInsets.only(
+                      top: 20, bottom: 20, right: 2, left: 2),
                   height: 90,
                   width: 90,
                   decoration: BoxDecoration(
@@ -314,7 +391,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               left: 0,
               child: Column(
                 children: [
-                  Text(' or Signup wuth'),
+                  Text(isSignupScreen ? ' or Signup with' : ' or Signin with'),
                   SizedBox(
                     height: 10,
                   ),
