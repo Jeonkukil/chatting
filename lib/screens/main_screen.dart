@@ -17,6 +17,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       backgroundColor: Palette.backgroundColor,
       body: Stack(
         children: [
+          // 배경을 위한 포지션
           Positioned(
             top: 0,
             right: 0,
@@ -68,6 +69,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               ),
             ),
           ),
+          // 텍스트 폼 필드
           Positioned(
             top: 180,
             child: Container(
@@ -151,6 +153,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     ],
                   ),
                   Container(
+                    margin: EdgeInsets.only(top: 20),
                     child: Form(
                       child: Column(
                         children: [
@@ -177,8 +180,82 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                   Radius.circular(35.0),
                                 ),
                               ),
+                              hintText: '아이디 입력하세용~!',
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                color: Palette.textColor1,
+                              ),
+                              contentPadding: EdgeInsets.all(10),
                             ),
                           ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.account_circle,
+                                color: Palette.iconColor,
+                              ),
+                              //둥근 태두리 만들기
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.textColor1,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(35.0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.textColor1,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(35.0),
+                                ),
+                              ),
+                              hintText: '아이디 입력하세용~!',
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                color: Palette.textColor1,
+                              ),
+                              contentPadding: EdgeInsets.all(10),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.account_circle,
+                                color: Palette.iconColor,
+                              ),
+                              //둥근 태두리 만들기
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.textColor1,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(35.0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Palette.textColor1,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(35.0),
+                                ),
+                              ),
+                              hintText: '아이디 입력하세용~!',
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                color: Palette.textColor1,
+                              ),
+                              contentPadding: EdgeInsets.all(10),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -186,6 +263,75 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                 ],
               ),
             ),
+          ),
+          // 전송버튼
+          Positioned(
+            top: 430,
+              right: 0,
+              left: 0,
+              child: Center(
+                child: Container(
+                  padding: EdgeInsets.only(top: 20, bottom: 20, right: 2, left: 2),
+                  height: 90,
+                  width: 90,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.blueAccent,
+                          Colors.pink,
+                        ],
+                        // 그라데이션의 방향 설정
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          // 지접에서 다른 지점까지의 거리
+                          offset: Offset(0,2),
+                        ),
+                      ],
+                    ),
+                    child: Icon(Icons.arrow_forward_ios,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+          ),
+
+          Positioned(
+            top: MediaQuery.of(context).size.height-125,
+              right: 0,
+              left: 0,
+              child: Column(
+                children: [
+                  Text(' or Signup wuth'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextButton.icon(
+                      onPressed: () {},
+                      style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        minimumSize: Size(155, 40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        backgroundColor: Palette.googleColor,
+                      ),
+                      icon: Icon(Icons.add),
+                      label: Text('Google'),),
+                ],
+              )
           ),
         ],
       ),
