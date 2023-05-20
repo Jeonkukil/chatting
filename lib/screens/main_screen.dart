@@ -164,6 +164,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       child: Column(
                         children: [
                           TextFormField(
+                            key: ValueKey(1),
                             decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.account_circle,
