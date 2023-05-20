@@ -10,6 +10,18 @@ class LoginSignupScreen extends StatefulWidget {
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   bool isSignupScreen = true;
+  final _formkey = GlobalKey<FormState>();
+  String userName = '';
+  String userEmail = '';
+  String userPassword = '';
+
+  void _tryValidatrion() {
+    final isValid = _formkey.currentState!.validate();
+    if(isValid) {
+      _formkey.currentState!.save();
+    //   모든 텍스트폼 필드가 가지고 있는 onSaved는 메소드를 동작시킨다.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +69,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         height: 5.0,
                       ),
                       Text(
-                        isSignupScreen ? "Signup to continue" : "Signin to continue",
+                        isSignupScreen ? "우리 오늘부터 1일?" : "어서와 보고싶었어!!",
                         style: TextStyle(
                           letterSpacing: 1.0,
                           color: Colors.white,
@@ -161,10 +173,20 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Form(
+                      key: _formkey,
                       child: Column(
                         children: [
                           TextFormField(
                             key: ValueKey(1),
+                            validator: (value) {
+                              if(value!.isEmpty || value.length < 4) {
+                                return '최소 4글자 이상 입력해주세요';
+                              }
+                              return null;
+                            },
+                            onSaved: (value){
+                              userName = value!;
+                            },
                             decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.account_circle,
@@ -199,6 +221,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             height: 8,
                           ),
                           TextFormField(
+                            key: ValueKey(2),
+                            validator: (value) {
+                              if(value!.isEmpty || value.contains('@')) {
+                                return 'E-Mail 형식에 맞게 작성해주세요';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              userEmail = value!;
+                            },
                             decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.email_outlined,
@@ -233,6 +265,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             height: 8,
                           ),
                           TextFormField(
+                            key: ValueKey(3),
+                            validator: (value) {
+                              if(value!.isEmpty ||  value.length < 6) {
+                                return "최소 6글자 이상 입력해주세요";
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              userPassword = value!;
+                            },
                             decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.password,
@@ -273,9 +315,20 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       top: 20
                     ),
                     child: Form(
+                      key: _formkey,
                       child: Column(
                         children: [
                           TextFormField(
+                            key: ValueKey(4),
+                            validator: (value) {
+                              if(value!.isEmpty ||  value.length < 6) {
+                                return "최소 6글자 이상 입력해주세요";
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              userEmail = value!;
+                            },
                             decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.account_circle,
@@ -308,6 +361,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           ),
                           SizedBox(height: 8),
                           TextFormField(
+                            key: ValueKey(5),
+                            validator: (value) {
+                              if(value!.isEmpty ||  value.length < 6) {
+                                return "최소 6글자 이상 입력해주세요";
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              userPassword = value!;
+                            },
                             decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.password,
@@ -363,30 +426,35 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.blueAccent,
-                          Colors.pink,
-                        ],
-                        // 그라데이션의 방향 설정
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight
-                      ),
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                          // 지접에서 다른 지점까지의 거리
-                          offset: Offset(0,2),
+                  child: GestureDetector(
+                    onTap: () {
+                      _tryValidatrion();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.blueAccent,
+                            Colors.pink,
+                          ],
+                          // 그라데이션의 방향 설정
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight
                         ),
-                      ],
-                    ),
-                    child: Icon(Icons.arrow_forward_ios,
-                      color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            // 지접에서 다른 지점까지의 거리
+                            offset: Offset(0,2),
+                          ),
+                        ],
+                      ),
+                      child: Icon(Icons.arrow_forward_ios,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
