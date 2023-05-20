@@ -346,7 +346,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             ),
           ),
           // 전송버튼
-          Positioned(
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeIn,
             top: isSignupScreen ? 430 : 390,
               right: 0,
               left: 0,
