@@ -70,9 +70,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             ),
           ),
           // 텍스트 폼 필드
-          Positioned(
+          AnimatedPositioned(
+            // 에니메이션구현
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeIn,
             top: 180,
-            child: Container(
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 500),
+              curve: Curves.easeIn,
               padding: EdgeInsets.all(20),
               height: isSignupScreen ? 280 : 250,
               width: MediaQuery.of(context).size.width - 40,
