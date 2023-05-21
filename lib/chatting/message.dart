@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -7,7 +8,12 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('chat').snapshots(),
+      stream: FirebaseFirestore.instance.collection('chat')
+      // 타임스테프 정렬
+      .orderBy('time', descending: true)
+          //정렬 방식은 ascending 방식과 descending 방식이 있다. 여기서는 최신의 메시지가 가장 밑에 보여지길
+          //원하므로 descending방식으로 한다.
+          .snapshots(),
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -19,7 +25,7 @@ class Messages extends StatelessWidget {
         final chatDocs = snapshot.data!.docs;
 
         return ListView.builder(
-
+          reverse: true,
           itemCount: chatDocs.length,
           itemBuilder: (context, index) {
             return Text(chatDocs[index]['text']);
