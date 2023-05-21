@@ -14,6 +14,8 @@ class LoginSignupScreen extends StatefulWidget {
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final _authentication = FirebaseAuth.instance;
+
+
   bool isSignupScreen = true;
   bool showSpinner = false;
   final _formkey = GlobalKey<FormState>();
@@ -518,14 +520,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 password: userPassword
                             );
                             if (newUser.user != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return ChatScreen();
-                                  },
-                                ),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) {
+                              //       return ChatScreen();
+                              //     },
+                              //   ),
+                              // );
                               setState(() {
                                 showSpinner = false;
                               });
