@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chatting/add_image/add_image.dart';
 import 'package:chatting/config/palette.dart';
 import 'package:chatting/screens/chat_screen.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -22,6 +25,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   String userName = '';
   String userEmail = '';
   String userPassword = '';
+  File? userPickedImage;
+
+  void pickedImage(File image) {
+    userPickedImage = image;
+  }
 
   void _tryValidatrion() {
     final isValid = _formkey.currentState!.validate();
@@ -37,7 +45,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       builder: (context) {
         return Dialog(
           backgroundColor: Colors.white,
-          child: AddImage(),
+          child: AddImage(pickedImage),
         );
       },
     );
@@ -123,7 +131,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   curve: Curves.easeIn,
                   padding: EdgeInsets.all(20),
                   height: isSignupScreen ? 280 : 250,
-                  width: MediaQuery.of(context).size.width - 40,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width - 40,
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -194,15 +205,15 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                         ),
                                       ),
                                       SizedBox(width: 15),
-                                      if(isSignupScreen)
-                                      GestureDetector(
-                                          onTap: () {
-                                            showAlert(context);
-                                          },
-                                          child: Icon(Icons.image,
-                                              color: isSignupScreen
-                                                  ? Colors.cyan
-                                                  : Colors.grey[300]))
+                                      if (isSignupScreen)
+                                        GestureDetector(
+                                            onTap: () {
+                                              showAlert(context);
+                                            },
+                                            child: Icon(Icons.image,
+                                                color: isSignupScreen
+                                                    ? Colors.cyan
+                                                    : Colors.grey[300]))
                                     ],
                                   ),
                                   if (isSignupScreen)
@@ -485,7 +496,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                 child: Center(
                   child: Container(
                     padding:
-                        EdgeInsets.only(top: 20, bottom: 20, right: 2, left: 2),
+                    EdgeInsets.only(top: 20, bottom: 20, right: 2, left: 2),
                     height: 90,
                     width: 90,
                     decoration: BoxDecoration(
@@ -498,6 +509,18 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           showSpinner = true;
                         });
                         if (isSignupScreen) {
+                          if (userPickedImage == null) {
+                            setState(() {
+                              showSpinner = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("이미지 !!! 필요행!!"),
+                                backgroundColor: Colors.blueAccent,
+                              ),
+                            );
+                            return;
+                          }
                           _tryValidatrion();
                           try {
                             final newUser = await _authentication
@@ -506,13 +529,28 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               password: userPassword,
                             );
 
+                            //  FCM 이미지 접근 설정
+                            final refImage = FirebaseStorage.instance
+                                .ref()
+                                .child('picked_image')
+                                .child(newUser.user!.uid + 'png');
+
+                            // UserImage 저장
+                            await refImage.putFile(userPickedImage!);
+                            final url = await refImage.getDownloadURL();
+                            //
+
                             // 데이터의 형식은 MAP의 형태를 가지고 있다.
                             // User 컬렉션에 저장이된다.
                             await FirebaseFirestore.instance
                                 .collection('user')
                                 .doc(newUser.user!.uid)
                                 .set(
-                                    {'userName': userName, 'email': userEmail});
+                                {
+                                  'userName': userName,
+                                  'email': userEmail,
+                                  'picked_image' : url
+                                });
 
                             if (newUser.user != null) {
                               Navigator.push(
@@ -525,25 +563,25 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               );
                             }
                           } catch (e) {
+                            //문제가되는 부분!!
+
                             print(e);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("E-Mail과 Password 를 다시 확인해주세요"),
-                                backgroundColor: Colors.blueAccent,
-                              ),
-                            );
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("E-Mail과 Password 를 다시 확인해주세요"),
+                                  backgroundColor: Colors.blueAccent,
+                                ),
+                              );
+                            }
                           }
                         }
-                        // print(userName);
-                        // print(userEmail);
-                        // print(userPassword);
                         if (!isSignupScreen) {
                           _tryValidatrion();
-
                           try {
                             final newUser = await _authentication
                                 .signInWithEmailAndPassword(
-                                    email: userEmail, password: userPassword);
+                                email: userEmail, password: userPassword);
                             if (newUser.user != null) {
                               // Navigator.push(
                               //   context,
@@ -597,8 +635,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   duration: Duration(milliseconds: 500),
                   curve: Curves.easeIn,
                   top: isSignupScreen
-                      ? MediaQuery.of(context).size.height - 125
-                      : MediaQuery.of(context).size.height - 165,
+                      ? MediaQuery
+                      .of(context)
+                      .size
+                      .height - 125
+                      : MediaQuery
+                      .of(context)
+                      .size
+                      .height - 165,
                   right: 0,
                   left: 0,
                   child: Column(
