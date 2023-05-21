@@ -194,6 +194,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                         ),
                                       ),
                                       SizedBox(width: 15),
+                                      if(isSignupScreen)
                                       GestureDetector(
                                           onTap: () {
                                             showAlert(context);
