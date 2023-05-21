@@ -47,7 +47,6 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               onPressed: () {
                 _authentication.signOut();
-
               })
         ],
       ),
@@ -56,7 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Column(
           children: [
             Expanded(
-                child: Messages(),
+              child: Messages(),
             ),
             NewMessage(),
           ],
