@@ -43,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: Icon(
                 Icons.exit_to_app_sharp,
-                color: Colors.red,
+                color: Colors.white,
               ),
               onPressed: () {
                 _authentication.signOut();
@@ -55,8 +55,8 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Column(
           children: [
             Expanded(
-              child: Messages(),
-            ),
+                child:
+                Messages()),
             NewMessage(),
           ],
         ),

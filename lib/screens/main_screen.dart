@@ -1,3 +1,4 @@
+import 'package:chatting/add_image/add_image.dart';
 import 'package:chatting/config/palette.dart';
 import 'package:chatting/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,6 @@ class LoginSignupScreen extends StatefulWidget {
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final _authentication = FirebaseAuth.instance;
 
-
   bool isSignupScreen = true;
   bool showSpinner = false;
   final _formkey = GlobalKey<FormState>();
@@ -29,6 +29,18 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       _formkey.currentState!.save();
       //   모든 텍스트폼 필드가 가지고 있는 onSaved는 메소드를 동작시킨다.
     }
+  }
+
+  void showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          child: AddImage(),
+        );
+      },
+    );
   }
 
   @override
@@ -73,8 +85,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 ),
                                 children: [
                                   TextSpan(
-                                    text:
-                                        isSignupScreen ? ' 어서와 친구' : ' 왔어 베프?!! ',
+                                    text: isSignupScreen
+                                        ? ' 어서와 친구'
+                                        : ' 왔어 베프?!! ',
                                     style: TextStyle(
                                         letterSpacing: 1.0,
                                         fontSize: 25,
@@ -168,19 +181,32 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               },
                               child: Column(
                                 children: [
-                                  Text(
-                                    'SIGNUP',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: isSignupScreen
-                                          ? Palette.activeColor
-                                          : Palette.textColor1,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'SIGNUP',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: isSignupScreen
+                                              ? Palette.activeColor
+                                              : Palette.textColor1,
+                                        ),
+                                      ),
+                                      SizedBox(width: 15),
+                                      GestureDetector(
+                                          onTap: () {
+                                            showAlert(context);
+                                          },
+                                          child: Icon(Icons.image,
+                                              color: isSignupScreen
+                                                  ? Colors.cyan
+                                                  : Colors.grey[300]))
+                                    ],
                                   ),
                                   if (isSignupScreen)
                                     Container(
-                                      margin: EdgeInsets.only(top: 3),
+                                      margin: EdgeInsets.fromLTRB(0, 3, 35, 0),
                                       height: 2,
                                       width: 55,
                                       color: Colors.pink,
@@ -481,11 +507,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
                             // 데이터의 형식은 MAP의 형태를 가지고 있다.
                             // User 컬렉션에 저장이된다.
-                           await FirebaseFirestore.instance.collection('User').doc(newUser.user!.uid)
-                            .set({
-                              'userName' : userName,
-                              'email' : userEmail
-                            });
+                            await FirebaseFirestore.instance
+                                .collection('user')
+                                .doc(newUser.user!.uid)
+                                .set(
+                                    {'userName': userName, 'email': userEmail});
 
                             if (newUser.user != null) {
                               Navigator.push(
@@ -510,15 +536,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         // print(userName);
                         // print(userEmail);
                         // print(userPassword);
-                        if(!isSignupScreen) {
+                        if (!isSignupScreen) {
                           _tryValidatrion();
 
                           try {
-                            final newUser =
-                            await _authentication.signInWithEmailAndPassword(
-                                email: userEmail,
-                                password: userPassword
-                            );
+                            final newUser = await _authentication
+                                .signInWithEmailAndPassword(
+                                    email: userEmail, password: userPassword);
                             if (newUser.user != null) {
                               // Navigator.push(
                               //   context,
@@ -532,7 +556,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 showSpinner = false;
                               });
                             }
-                          }catch(e) {
+                          } catch (e) {
                             print(e);
                           }
                         }
@@ -578,8 +602,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   left: 0,
                   child: Column(
                     children: [
-                      Text(
-                          isSignupScreen ? ' or Signup with' : ' or Signin with'),
+                      Text(isSignupScreen
+                          ? ' or Signup with'
+                          : ' or Signin with'),
                       SizedBox(
                         height: 10,
                       ),

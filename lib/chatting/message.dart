@@ -10,7 +10,7 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    return StreamBuilder(
+    return StreamBuilder (
       stream: FirebaseFirestore.instance.collection('chat')
       // 타임스테프 정렬
       .orderBy('time', descending: true)
@@ -19,6 +19,8 @@ class Messages extends StatelessWidget {
           .snapshots(),
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),
@@ -31,8 +33,10 @@ class Messages extends StatelessWidget {
           reverse: true,
           itemCount: chatDocs.length,
           itemBuilder: (context, index) {
-            return ChatBubble(chatDocs[index]['text'],
-            chatDocs[index]['userID'].toString() == user!.uid
+
+            return ChatBubbles(chatDocs[index]['text'],
+            chatDocs[index]['userID'].toString() == user!.uid,
+              chatDocs[index]['userName']
             );
           },
         );
